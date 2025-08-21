@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mental Health Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question h3 {
+      margin-bottom: 10px;
+      color: #111827;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    input[type="radio"] {
+      margin-right: 8px;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    #results {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    .explanation {
+      margin-top: 8px;
+      padding: 10px;
+      background: #fef9c3;
+      border-left: 4px solid #facc15;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .correct {
+      color: green;
+      font-weight: bold;
+    }
+    .incorrect {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Mental Health Quiz</h1>
+    <form id="quizForm"></form>
+    <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "What does the World Health Organization (WHO) say about mental health?",
+        answers: ["It is simply the absence of mental illness", "It is about realizing abilities, coping with stress, working productively, and contributing to community", "It is only about emotional well-being"],
+        correct: 1,
+        explanation: "WHO defines mental health as a state of well-being where a person realizes their abilities, can cope with normal stresses, work productively, and contribute to their community."
+      },
+      {
+        question: "How can depression affect physical health?",
+        answers: ["It has no effect", "It can increase risk of heart disease and diabetes", "It only affects sleep"],
+        correct: 1,
+        explanation: "Mental and physical health are connected. Depression can increase risks of conditions like heart disease and diabetes."
+      },
+      {
+        question: "What age group is navigating major social, emotional, and physical changes?",
+        answers: ["Children (0–11)", "Adolescents (12–17)", "Older Adults (65+)"],
+        correct: 1,
+        explanation: "Adolescence is marked by rapid physical, social, and emotional changes — a time of both opportunity and vulnerability."
+      },
+      {
+        question: "Which factor is considered a protective factor for mental health?",
+        answers: ["Discrimination", "Social isolation", "Supportive relationships"],
+        correct: 2,
+        explanation: "Supportive relationships, safe communities, and positive coping skills protect mental health."
+      },
+      {
+        question: "How many U.S. adults live with a mental health condition?",
+        answers: ["1 in 5", "1 in 50", "1 in 100"],
+        correct: 0,
+        explanation: "Nearly 1 in 5 U.S. adults experiences a mental health condition."
+      },
+      {
+        question: "Which age group may face mental health changes related to retirement and loss?",
+        answers: ["Young Adults (18–26)", "Middle Adults (27–64)", "Older Adults (65+)"],
+        correct: 2,
+        explanation: "Older adults often face retirement, health changes, and loss, all of which can impact mental health."
+      },
+      {
+        question: "What does it mean if a community has reduced risk factors and more protective factors?",
+        answers: ["Community mental health improves", "Mental illness disappears", "No one experiences stress"],
+        correct: 0,
+        explanation: "Reducing risks and boosting protections strengthens community mental well-being."
+      },
+      {
+        question: "How many adolescents (12–17) in the U.S. have a diagnosed mental or behavioral condition?",
+        answers: ["About 5%", "About 20%", "About 50%"],
+        correct: 1,
+        explanation: "Roughly 1 in 5 adolescents (20%) have a diagnosed mental or behavioral condition."
+      },
+      {
+        question: "What approach does the CDC take toward mental health?",
+        answers: ["A public health approach focusing on prevention", "Only individual treatment", "Only crisis response"],
+        correct: 0,
+        explanation: "CDC uses a public health approach — focusing on prevention and healthier environments."
+      },
+      {
+        question: "What is the 988 Lifeline?",
+        answers: ["A general health hotline", "A free, confidential 24/7 crisis support line", "A job counseling service"],
+        correct: 1,
+        explanation: "The 988 Lifeline offers free, confidential crisis support for people experiencing mental health distress."
+      }
+    ];
+
+    const quizForm = document.getElementById("quizForm");
+
+    // Render questions
+    questions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.classList.add("question");
+      div.innerHTML = `<h3>${index + 1}. ${q.question}</h3>`;
+      q.answers.forEach((answer, i) => {
+        div.innerHTML += `
+          <label>
+            <input type="radio" name="q${index}" value="${i}">
+            ${answer}
+          </label>
+        `;
+      });
+      quizForm.appendChild(div);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      let resultsHTML = "<h2>Your Results</h2>";
+      
+      questions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected && parseInt(selected.value) === q.correct) {
+          score++;
+          resultsHTML += `<p><span class="correct">✔ Question ${index + 1}: Correct!</span></p>`;
+        } else {
+          resultsHTML += `<p><span class="incorrect">✘ Question ${index + 1}: Incorrect.</span><br>
+          Correct answer: <strong>${q.answers[q.correct]}</strong></p>`;
+        }
+        resultsHTML += `<div class="explanation">${q.explanation}</div>`;
+      });
+
+      resultsHTML = `<h2>Final Score: ${score} / ${questions.length}</h2>` + resultsHTML;
+      document.getElementById("results").innerHTML = resultsHTML;
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  </script>
+</body>
+</html>
