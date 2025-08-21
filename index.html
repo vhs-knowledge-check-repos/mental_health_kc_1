@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mental Health Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f9ff;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #004d80;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 15px;
+    }
+    .answers label {
+      display: block;
+      margin: 5px 0;
+      padding: 8px;
+      background: #f0f8ff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: #004d80;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #006bb3;
+    }
+    #results {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-radius: 8px;
+    }
+    .explanation {
+      font-size: 14px;
+      margin-top: 5px;
+      padding: 8px;
+      background: #f9f9f9;
+      border-left: 4px solid #004d80;
+    }
+    .correct { color: green; }
+    .incorrect { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Mental Health Awareness Quiz</h1>
+  <div class="quiz-container" id="quiz"></div>
+  <button id="submit">Submit Quiz</button>
+  <div id="results"></div>
+
+  <script>
+    const questions = [
+      {
+        question: "What is mental health?",
+        answers: {
+          a: "The absence of any mental illness",
+          b: "A state of well-being affecting thoughts, emotions, and behavior",
+          c: "Just how happy someone feels",
+          d: "Something only adults need to worry about"
+        },
+        correctAnswer: "b",
+        explanation: "Mental health is more than just the absence of illness; it’s about well-being, coping with stress, and contributing to community life."
+      },
+      {
+        question: "Which organization defines mental health as a state of well-being?",
+        answers: {
+          a: "World Health Organization (WHO)",
+          b: "Centers for Disease Control and Prevention (CDC)",
+          c: "National Institutes of Health (NIH)",
+          d: "American Psychiatric Association"
+        },
+        correctAnswer: "a",
+        explanation: "The WHO describes mental health as a state of well-being where people realize their abilities and cope with life’s challenges."
+      },
+      {
+        question: "Which of the following is a risk factor for poor mental health?",
+        answers: {
+          a: "Social isolation",
+          b: "Supportive relationships",
+          c: "Safe communities",
+          d: "Access to healthcare"
+        },
+        correctAnswer: "a",
+        explanation: "Risk factors include things like social isolation, discrimination, and limited access to resources."
+      },
+      {
+        question: "Which of these is a protective factor for mental health?",
+        answers: {
+          a: "Chronic illness",
+          b: "Discrimination",
+          c: "Supportive relationships",
+          d: "Exposure to violence"
+        },
+        correctAnswer: "c",
+        explanation: "Strong, supportive relationships help buffer stress and protect mental well-being."
+      },
+      {
+        question: "What percentage of U.S. adults live with a mental health condition?",
+        answers: {
+          a: "1 in 50",
+          b: "1 in 10",
+          c: "1 in 5",
+          d: "1 in 2"
+        },
+        correctAnswer: "c",
+        explanation: "Nearly 1 in 5 U.S. adults lives with a mental health condition."
+      },
+      {
+        question: "About how many adolescents (ages 12–17) have a diagnosed condition?",
+        answers: {
+          a: "5%",
+          b: "10%",
+          c: "20%",
+          d: "35%"
+        },
+        correctAnswer: "c",
+        explanation: "Around 20% of adolescents ages 12–17 live with a mental or behavioral condition."
+      },
+      {
+        question: "Mental health conditions can:",
+        answers: {
+          a: "Increase risk of physical illness",
+          b: "Be influenced by social and economic factors",
+          c: "Affect relationships and work",
+          d: "All of the above"
+        },
+        correctAnswer: "d",
+        explanation: "Mental health affects physical health, social life, and economic well-being."
+      },
+      {
+        question: "Which of the following is TRUE?",
+        answers: {
+          a: "People cannot recover from serious mental illness",
+          b: "Only therapy works for mental health conditions",
+          c: "People with mental health conditions can live fulfilling lives",
+          d: "Mental health is only a concern in adulthood"
+        },
+        correctAnswer: "c",
+        explanation: "With support and treatment, people with mental health conditions can thrive."
+      },
+      {
+        question: "What is CDC’s approach to mental health?",
+        answers: {
+          a: "Focusing only on treatment",
+          b: "A public health approach emphasizing prevention",
+          c: "Providing counseling directly",
+          d: "Only studying physical health"
+        },
+        correctAnswer: "b",
+        explanation: "The CDC works on prevention and creating healthy environments where people live, learn, work, and play."
+      },
+      {
+        question: "If someone is struggling, what number can they call or text?",
+        answers: {
+          a: "411",
+          b: "611",
+          c: "911",
+          d: "988"
+        },
+        correctAnswer: "d",
+        explanation: "The 988 Suicide & Crisis Lifeline offers free, confidential support 24/7."
+      }
+    ];
+
+    function buildQuiz() {
+      const output = [];
+      questions.forEach((q, i) => {
+        const answers = [];
+        for (letter in q.answers) {
+          answers.push(
+            `<label>
+              <input type="radio" name="question${i}" value="${letter}">
+              ${letter}: ${q.answers[letter]}
+            </label>`
+          );
+        }
+        output.push(
+          `<div class="question"> <strong>${i + 1}. ${q.question}</strong></div>
+           <div class="answers">${answers.join("")}</div>`
+        );
+      });
+      document.getElementById("quiz").innerHTML = output.join("");
+    }
+
+    function showResults() {
+      const answerContainers = quizContainer.querySelectorAll(".answers");
+      let numCorrect = 0;
+      let output = "";
+
+      questions.forEach((q, i) => {
+        const answerContainer = answerContainers[i];
+        const selector = `input[name=question${i}]:checked`;
+        const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+        if (userAnswer === q.correctAnswer) {
+          numCorrect++;
+          output += `<p><strong>${i + 1}. ${q.question}</strong> <span class="correct">✔ Correct</span>
+          <div class="explanation">${q.explanation}</div></p>`;
+        } else {
+          output += `<p><strong>${i + 1}. ${q.question}</strong> <span class="incorrect">✘ Incorrect</span><br>
+          Correct answer: <em>${q.answers[q.correctAnswer]}</em>
+          <div class="explanation">${q.explanation}</div></p>`;
+        }
+      });
+
+      resultsContainer.innerHTML = `<h2>Your Score: ${numCorrect} out of ${questions.length}</h2>` + output;
+    }
+
+    const quizContainer = document.getElementById("quiz");
+    const resultsContainer = document.getElementById("results");
+    const submitButton = document.getElementById("submit");
+
+    buildQuiz();
+    submitButton.addEventListener("click", showResults);
+  </script>
+</body>
+</html>
